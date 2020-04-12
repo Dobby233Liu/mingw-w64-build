@@ -126,7 +126,7 @@ build_toolchain()
   echo "configuring binutils" >&3
   "../../src/binutils-$v_binutils/configure" --prefix="$prefix" --enable-shared \
     --enable-static --with-sysroot="$prefix" --target="$host" \
-    --enable-multilib --enable-lib32 --enable-lib64 --enable-nls --enable-lto --disable-werror || error_exit
+    --disable-multilib --enable-nls --enable-lto --disable-werror || error_exit
   echo "building binutils" >&3
   make -j $cpus || error_exit
   echo "installing binutils" >&3
@@ -144,7 +144,7 @@ build_toolchain()
   clean_build "$bld/gcc"
   echo "configuring gcc" >&3
   "../../src/gcc-$v_gcc/configure" --target="$host" --enable-shared \
-    --enable-static --enable-multilib --enable-lib32 --enable-lib64 --prefix="$prefix" \
+    --enable-static --disable-multilib --prefix="$prefix" \
     --enable-languages=c,c++ --enable-nls || error_exit
   echo "running 'make-gcc' for gcc" >&3
   make -j $cpus all-gcc || error_exit
@@ -153,6 +153,8 @@ build_toolchain()
 
   clean_build "$bld/mingw-w64"
   echo "configuring mingw-w64-crt" >&3
+  local host="x86_64-w64-mingw32"
+  local prefix="$wd/$host"
   "../../src/mingw-w64-$v_mingww64/mingw-w64-crt/configure" --build="$build" --host="$host" \
     --prefix="$prefix/$host" --with-sysroot="$prefix/$host"
   echo "building mingw-w64-crt" >&3
