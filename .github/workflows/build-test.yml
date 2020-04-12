@@ -13,9 +13,10 @@ jobs:
             sudo apt-get install texinfo bison flex
             chmod +x mingw-w64-build
             ./mingw-w64-build x86_64
-        - name: directories
-          run: |
-            ls x86_64-w64-mingw32
+        - uses: actions/upload-artifact@v1
+          with:
+            name: x86_64-pc-linux-gnu-x86_64-w64-mingw64
+            path: x86_64-w64-mingw32/
   build-i686:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +27,8 @@ jobs:
             sudo apt-get install texinfo bison flex
             chmod +x mingw-w64-build
             ./mingw-w64-build i686
-        - name: directories
-          run: |
-            ls i686-w64-mingw32
+        - uses: actions/upload-artifact@v1
+          with:
+            name: x86_64-pc-linux-gnu-i686-w64-mingw64
+            path: i686-w64-mingw32/
 # build-both:
