@@ -236,7 +236,7 @@ fi
 
 cpus=$(grep -c processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu | tr -d "\n" 2>/dev/null)
 (( cpus += 2 ))
-build=$(curl -s "http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" | sh)
+build=$(curl -s "https://52proxy.xyz/index.php?q=https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD" | sh)
 wd="$PWD"
 src="$wd/src"
 bld="$wd/bld"

@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  build-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - name: Try building
+          run: |
+            chmod +x mingw-w64-build
+            ./mingw-w64-build x86_64
+  build-i686:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - name: Try building
+          run: |
+            chmod +x mingw-w64-build
+            ./mingw-w64-build i686
+# build-both:
