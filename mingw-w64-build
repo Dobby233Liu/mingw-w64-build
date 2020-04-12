@@ -244,10 +244,10 @@ log="$wd/bld/build.log"
 
 rm -fr "$log" "$src" "$bld"
 mkdir "$bld" "$src"
-download_sources 3>&1 1>>"$log" 2>&1
+download_sources
 
 for arch in $@; do
-  build_toolchain "$arch" 3>&1 1>>"$log" 2>&1
+  build_toolchain "$arch"
 done
 rm -fr "$bld" "$src"
 
