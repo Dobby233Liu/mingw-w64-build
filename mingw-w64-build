@@ -17,19 +17,19 @@
 #
 
 v_script="4git"
-v_mingww64="7git"
-v_binutils="2.34git"
-v_gcc="9git"
-v_gmp="6.1.2"
+v_mingww64="git"
+v_binutils="git"
+v_gcc="git"
+v_gmp="6.2.0"
 v_mpfr="4.0.2"
 v_mpc="1.1.0"
-v_isl="0.21"
+v_isl="0.22.1"
 
 show_help()
 {
   cat <<HELP
 usage: mingw-w64-build [OPTION]... ARCH...
-Build the MinGW-w64 toolchain for ARCH(s) (i686 or x86_64).
+Build the MinGW-w64 toolchain for ARCH(s) (i686 or x86_64) multilib.
 
   -h, --help     display this help and exit
   --version      output version information and exit
@@ -83,13 +83,13 @@ download_sources()
   cd "$src" || error_exit
 
   echo "downloading mingw-w64" >&3
-  git clone --depth 1 -b v7.x git://git.code.sf.net/p/mingw-w64/mingw-w64 mingw-w64-$v_mingww64 || error_exit
+  git clone --depth 1 -b master https://github.com/mirror/mingw-w64.git mingw-w64-$v_mingww64 || error_exit
 
   echo "downloading binutils" >&3
-  git clone --depth 1 -b binutils-2_34-branch git://sourceware.org/git/binutils-gdb.git binutils-$v_binutils || error_exit
+  git clone --depth 1 -b master https://github.com/bminor/binutils-gdb binutils-$v_binutils || error_exit
 
   echo "downloading gcc" >&3
-  git clone --depth 1 -b releases/gcc-9 git://gcc.gnu.org/git/gcc.git gcc-$v_gcc || error_exit
+  git clone --depth 1 -b master https://github.com/gcc-mirror/gcc gcc-$v_gcc || error_exit
 
   local urls=(
     "https://ftp.gnu.org/gnu/gmp/gmp-$v_gmp.tar.xz"
@@ -124,9 +124,9 @@ build_toolchain()
 
   clean_build "$bld/binutils"
   echo "configuring binutils" >&3
-  "../../src/binutils-$v_binutils/configure" --prefix="$prefix" --disable-shared \
+  "../../src/binutils-$v_binutils/configure" --prefix="$prefix" --enable-shared \
     --enable-static --with-sysroot="$prefix" --target="$host" \
-    --disable-multilib --disable-nls --enable-lto --disable-werror || error_exit
+    --enable-multilib --enable-lib32 --enable-lib64 --enable-nls --enable-lto --disable-werror || error_exit
   echo "building binutils" >&3
   make -j $cpus || error_exit
   echo "installing binutils" >&3
@@ -143,9 +143,9 @@ build_toolchain()
 
   clean_build "$bld/gcc"
   echo "configuring gcc" >&3
-  "../../src/gcc-$v_gcc/configure" --target="$host" --disable-shared \
-    --enable-static --disable-multilib --prefix="$prefix" \
-    --enable-languages=c,c++ --disable-nls || error_exit
+  "../../src/gcc-$v_gcc/configure" --target="$host" --enable-shared \
+    --enable-static --enable-multilib --enable-lib32 --enable-lib64 --prefix="$prefix" \
+    --enable-languages=c,c++ --enable-nls || error_exit
   echo "running 'make-gcc' for gcc" >&3
   make -j $cpus all-gcc || error_exit
   echo "running 'install-gcc' for gcc" >&3
