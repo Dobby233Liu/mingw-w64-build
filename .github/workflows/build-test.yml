@@ -15,8 +15,7 @@ jobs:
             ./mingw-w64-build x86_64
         - name: directories
           run: |
-            ls
-            echo "todo: expand"
+            ls x86_64-w64-mingw32
   build-i686:
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +28,5 @@ jobs:
             ./mingw-w64-build i686
         - name: directories
           run: |
-            ls
-            echo "todo: expand"
+            ls i686-w64-mingw32
 # build-both:
